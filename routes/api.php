@@ -3,24 +3,34 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CoachController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| مسیرهای عمومی (بدون نیاز به توکن)
 |--------------------------------------------------------------------------
 */
 
-// GET /api/users
-// POST /api/users
-// GET /api/users/{id}
-// PUT /api/users/{id}
-// DELETE /api/users/{id}
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::apiResource('users', UserController::class);
-Route::apiResource('coaches', CoachController::class);
-Route::apiResource('admins', AdminController::class);
-Route::apiResource('roles', RoleController::class);
-Route::apiResource('payments', PaymentController::class);
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 
+/*
+|--------------------------------------------------------------------------
+| مسیرهای محافظت شده (نیاز به توکن Bearer)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth:sanctum')->group(function () {
 
+    Route::apiResource('users', UserController::class);
 
+    Route::apiResource('coaches', CoachController::class);
+
+    Route::get('/me', [UserController::class, 'index']);
+
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+});

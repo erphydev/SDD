@@ -10,17 +10,21 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('surename');
+            $table->string('name')->default('New User');
+            $table->string('surename')->nullable();
             $table->string('phonenumber')->unique();
-            $table->string('otp');
-            $table->date('otp_expiry');
-            $table->date('login_expiry');
-            $table->string('email')->unique();
+
+
+            $table->string('otp')->nullable();
+            $table->dateTime('otp_expiry')->nullable();
+            $table->dateTime('login_expiry')->nullable();
+
+            $table->string('email')->unique()->nullable();
+
             $table->unsignedBigInteger('coach_id')->nullable();
             $table->foreign('coach_id')->references('id')->on('coachs')->onDelete('set null');
-            $table->timestamps();
 
+            $table->timestamps();
         });
     }
 

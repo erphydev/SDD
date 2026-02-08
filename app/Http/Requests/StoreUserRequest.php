@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreCoachRequest extends FormRequest
+// دقت کنید اینجا باید StoreUserRequest باشد، نه StoreCoachRequest
+class StoreUserRequest extends FormRequest
 {
     public function authorize()
     {
@@ -16,10 +16,10 @@ class StoreCoachRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|unique:coachs,phone',
-            'job' => 'required|string|max:255',
-            'address' => 'nullable|string',
-            'status' => ['required', Rule::in(['active', 'inactive'])],
+            'surename' => 'required|string|max:255',
+            'phonenumber' => 'required|string|unique:users,phonenumber', // چک کردن یکتایی شماره
+            'email' => 'required|email|unique:users,email', // چک کردن یکتایی ایمیل
+            'coach_id' => 'nullable|exists:coachs,id',
         ];
     }
 }
